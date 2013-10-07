@@ -46,6 +46,7 @@ public class FeatureToggleRunner extends BlockJUnit4ClassRunner {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
         return null;
     }
 }

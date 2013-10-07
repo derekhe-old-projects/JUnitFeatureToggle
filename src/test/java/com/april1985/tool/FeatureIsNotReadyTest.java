@@ -5,9 +5,9 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.fail;
 
-@FeatureToggle(feature = "RAC")
 @RunWith(FeatureToggleRunner.class)
-public class RACIsNotReadyTest {
+@FeatureToggle(feature = "NotCompletedFeature")
+public class FeatureIsNotReadyTest {
     @Test
     public void shouldNotRunThisTest() throws Exception {
         fail();

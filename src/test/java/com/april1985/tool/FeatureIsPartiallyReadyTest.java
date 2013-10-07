@@ -6,10 +6,10 @@ import org.junit.runner.RunWith;
 import static junit.framework.Assert.fail;
 
 @RunWith(FeatureToggleRunner.class)
-public class RACIsPartiallyReadyTest {
+public class FeatureIsPartiallyReadyTest {
     @Test
-    @FeatureToggle(feature = "RAC")
-    public void shouldIgnoreThisTest() {
+    @FeatureToggle(feature = "NotCompletedFeature")
+    public void shouldNotRunThisTest() {
         fail();
     }
 

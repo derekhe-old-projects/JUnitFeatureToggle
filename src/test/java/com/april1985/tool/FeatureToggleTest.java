@@ -12,40 +12,36 @@ import static org.mockito.Mockito.*;
 
 public class FeatureToggleTest {
     @Test
-    public void testShouldIgnoreTestMethodWhenFeatureIsOff() throws Exception {
-        Method method = RACIsPartiallyReadyTest.class.getMethod("shouldIgnoreThisTest");
+    public void shouldNotRunTestMethodWhenFeatureIsOff() throws Exception {
+        Method method = FeatureIsPartiallyReadyTest.class.getMethod("shouldNotRunThisTest");
         FrameworkMethod frameworkMethod = new FrameworkMethod(method);
-
         RunNotifier runNotifier = mock(RunNotifier.class);
+        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(FeatureIsNotReadyTest.class);
 
-        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(RACIsNotReadyTest.class);
         featureToggleRunner.runChild(frameworkMethod, runNotifier);
 
         verify(runNotifier).fireTestIgnored(any(Description.class));
     }
 
     @Test
-    public void testShouldIgnoreAllTestMethodsWhenFeatureIsOffOnClass() throws Exception {
-
-        Method method = RACIsNotReadyTest.class.getMethod("shouldNotRunThisTest");
+    public void shouldNotRunAllTestMethodsWhenFeatureIsOffOnClass() throws Exception {
+        Method method = FeatureIsNotReadyTest.class.getMethod("shouldNotRunThisTest");
         FrameworkMethod frameworkMethod = new FrameworkMethod(method);
-
         RunNotifier runNotifier = mock(RunNotifier.class);
+        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(FeatureIsNotReadyTest.class);
 
-        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(RACIsNotReadyTest.class);
         featureToggleRunner.runChild(frameworkMethod, runNotifier);
 
         verify(runNotifier).fireTestIgnored(any(Description.class));
     }
 
     @Test
-    public void testShouldRunTestWhenNoFeatureToggleAnnotation() throws NoSuchMethodException, InitializationError {
-        Method method = RACIsPartiallyReadyTest.class.getMethod("shouldRunThisTest");
+    public void shouldRunTestWhenNoFeatureToggleAnnotation() throws NoSuchMethodException, InitializationError {
+        Method method = FeatureIsPartiallyReadyTest.class.getMethod("shouldRunThisTest");
         FrameworkMethod frameworkMethod = new FrameworkMethod(method);
-
         RunNotifier runNotifier = mock(RunNotifier.class);
+        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(FeatureIsPartiallyReadyTest.class);
 
-        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(RACIsPartiallyReadyTest.class);
         featureToggleRunner.runChild(frameworkMethod, runNotifier);
 
         verify(runNotifier, times(0)).fireTestIgnored(any(Description.class));
