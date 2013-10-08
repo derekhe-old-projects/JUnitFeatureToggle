@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.fail;
 
-@FeatureToggle(feature = "NotCompletedFeature")
+@FeatureToggle(feature = "IncompleteFeature")
 public class FeatureIsNotReadyTest {
     @Rule
     public FeatureToggleRule featureToggleRule = new FeatureToggleRule();

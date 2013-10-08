@@ -10,7 +10,7 @@ public class FeatureIsPartiallyReadyTest {
     public FeatureToggleRule featureToggleRule = new FeatureToggleRule();
 
     @Test
-    @FeatureToggle(feature = "NotCompletedFeature")
+    @FeatureToggle(feature = "IncompleteFeature")
     public void shouldNotRunThisTest() {
         fail();
     }
