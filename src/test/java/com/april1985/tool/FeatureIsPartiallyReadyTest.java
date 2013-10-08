@@ -1,12 +1,14 @@
 package com.april1985.tool;
 
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.fail;
 
-@RunWith(FeatureToggleRunner.class)
 public class FeatureIsPartiallyReadyTest {
+    @Rule
+    public FeatureToggleRule featureToggleRule = new FeatureToggleRule();
+
     @Test
     @FeatureToggle(feature = "NotCompletedFeature")
     public void shouldNotRunThisTest() {

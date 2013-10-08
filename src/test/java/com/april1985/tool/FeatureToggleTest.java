@@ -1,49 +1,46 @@
 package com.april1985.tool;
 
 import org.junit.Test;
-import org.junit.runner.Description;
-import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
 
 import java.lang.reflect.Method;
 
-import static org.mockito.Mockito.*;
+import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class FeatureToggleTest {
     @Test
-    public void shouldNotRunTestMethodWhenFeatureIsOff() throws Exception {
+    public void shouldNotRunTestMethodWhenFeatureIsOff() throws Throwable {
         Method method = FeatureIsPartiallyReadyTest.class.getMethod("shouldNotRunThisTest");
         FrameworkMethod frameworkMethod = new FrameworkMethod(method);
-        RunNotifier runNotifier = mock(RunNotifier.class);
-        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(FeatureIsNotReadyTest.class);
 
-        featureToggleRunner.runChild(frameworkMethod, runNotifier);
+        Statement statement = new FeatureToggleRule().apply(mock(Statement.class), frameworkMethod, null);
 
-        verify(runNotifier).fireTestIgnored(any(Description.class));
+        assertTrue(statement.getClass().equals(FeatureToggleRule.IgnoredMethodStatement.class));
     }
 
     @Test
-    public void shouldNotRunAllTestMethodsWhenFeatureIsOffOnClass() throws Exception {
+    public void shouldNotRunAllTestMethodsWhenFeatureIsOffOnClass() throws Throwable {
         Method method = FeatureIsNotReadyTest.class.getMethod("shouldNotRunThisTest");
         FrameworkMethod frameworkMethod = new FrameworkMethod(method);
-        RunNotifier runNotifier = mock(RunNotifier.class);
-        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(FeatureIsNotReadyTest.class);
 
-        featureToggleRunner.runChild(frameworkMethod, runNotifier);
+        Statement statement = new FeatureToggleRule().apply(mock(Statement.class), frameworkMethod, null);
 
-        verify(runNotifier).fireTestIgnored(any(Description.class));
+        assertTrue(statement.getClass().equals(FeatureToggleRule.IgnoredMethodStatement.class));
     }
 
     @Test
     public void shouldRunTestWhenNoFeatureToggleAnnotation() throws NoSuchMethodException, InitializationError {
         Method method = FeatureIsPartiallyReadyTest.class.getMethod("shouldRunThisTest");
         FrameworkMethod frameworkMethod = new FrameworkMethod(method);
-        RunNotifier runNotifier = mock(RunNotifier.class);
-        FeatureToggleRunner featureToggleRunner = new FeatureToggleRunner(FeatureIsPartiallyReadyTest.class);
 
-        featureToggleRunner.runChild(frameworkMethod, runNotifier);
+        Statement mockStatement = mock(Statement.class);
+        Statement statement = new FeatureToggleRule().apply(mockStatement, frameworkMethod, null);
 
-        verify(runNotifier, times(0)).fireTestIgnored(any(Description.class));
+        assertThat(statement, is(mockStatement));
     }
 }
