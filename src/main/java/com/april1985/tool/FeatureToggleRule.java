@@ -1,16 +1,32 @@
 package com.april1985.tool;
 
 import org.junit.internal.AssumptionViolatedException;
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import java.io.IOException;
 import java.util.Properties;
 
-public class FeatureToggleRule implements MethodRule {
+public class FeatureToggleRule implements TestRule {
+
     public static final String TOGGLE_OFF = "OFF";
     public static final String DEFAULT_PROPERTY_FILENAME = "feature-toggle.properties";
+
+    @Override
+    public Statement apply(Statement base, Description description) {
+        FeatureToggle annotationOnMethod = description.getAnnotation(FeatureToggle.class);
+        FeatureToggle annotationOnClass = description.getTestClass().getAnnotation(FeatureToggle.class);
+
+        if (annotationOnMethod == null && annotationOnClass != null)
+            annotationOnMethod = annotationOnClass;
+
+        if (annotationOnMethod != null && isToggleOff(annotationOnMethod)) {
+            return new IgnoredMethodStatement(annotationOnMethod.feature());
+        } else {
+            return base;
+        }
+    }
 
     class IgnoredMethodStatement extends Statement {
         private final String featureName;
@@ -21,25 +37,12 @@ public class FeatureToggleRule implements MethodRule {
 
         @Override
         public void evaluate() throws Throwable {
-            throw new AssumptionViolatedException("This class is ignored due to " + featureName + " is turned off");
+            throw new AssumptionViolatedException("This is ignored due to " + featureName + " is turned off");
         }
     }
 
-    @Override
-    public Statement apply(Statement base, FrameworkMethod method, Object target) {
-        FeatureToggle annotationOnMethod = method.getAnnotation(FeatureToggle.class);
-        FeatureToggle annotationOnClass = method.getMethod().getDeclaringClass().getAnnotation(FeatureToggle.class);
-
-        if (annotationOnMethod == null && annotationOnClass != null)
-            annotationOnMethod = annotationOnClass;
-
-        String featureToggle = getToggleValue(annotationOnMethod);
-
-        if (annotationOnMethod != null && TOGGLE_OFF.equals(featureToggle)) {
-            return new IgnoredMethodStatement(annotationOnMethod.feature());
-        } else {
-            return base;
-        }
+    private boolean isToggleOff(FeatureToggle featureToggle) {
+        return TOGGLE_OFF.equals(getToggleValue(featureToggle));
     }
 
 
