@@ -11,7 +11,7 @@ import java.util.Properties;
 public class FeatureToggleRule implements TestRule {
 
     public static final String TOGGLE_OFF = "OFF";
-    public static final String DEFAULT_PROPERTY_FILENAME = "feature-toggle.properties";
+    public static final String DEFAULT_PROPERTY_FILENAME = "./feature-toggle.properties";
 
     @Override
     public Statement apply(Statement base, Description description) {
