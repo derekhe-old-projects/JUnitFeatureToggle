@@ -1,4 +1,4 @@
-package com.april1985.tool;
+package com.thoughtworks.junitext.featuretoggle;
 
 import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.Rule;
