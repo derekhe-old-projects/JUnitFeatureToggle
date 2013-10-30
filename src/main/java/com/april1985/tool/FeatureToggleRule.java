@@ -13,6 +13,12 @@ public class FeatureToggleRule implements TestRule {
     public static final String TOGGLE_OFF = "OFF";
     public static final String DEFAULT_PROPERTY_FILENAME = "feature-toggle.properties";
 
+    public FeatureToggleRule() {
+        prop = new Properties();
+    }
+
+    private Properties prop;
+
     @Override
     public Statement apply(Statement base, Description description) {
         FeatureToggle annotationOnMethod = description.getAnnotation(FeatureToggle.class);
@@ -29,8 +35,8 @@ public class FeatureToggleRule implements TestRule {
     }
 
     class IgnoredMethodStatement extends Statement {
-        private final String featureName;
 
+        private final String featureName;
         public IgnoredMethodStatement(String featureName) {
             this.featureName = featureName;
         }
@@ -39,19 +45,17 @@ public class FeatureToggleRule implements TestRule {
         public void evaluate() throws Throwable {
             throw new AssumptionViolatedException("This is ignored due to " + featureName + " is turned off");
         }
-    }
 
+    }
     private boolean isToggleOff(FeatureToggle featureToggle) {
         return TOGGLE_OFF.equals(getToggleValue(featureToggle));
     }
-
 
     private String getToggleValue(FeatureToggle annotation) {
         if (annotation == null) {
             return null;
         }
 
-        Properties prop = new Properties();
         try {
             prop.load(ClassLoader.getSystemResourceAsStream(DEFAULT_PROPERTY_FILENAME));
             return prop.getProperty(annotation.feature());
@@ -60,5 +64,10 @@ public class FeatureToggleRule implements TestRule {
         }
 
         return null;
+    }
+
+
+    public void setProp(Properties prop) {
+        this.prop = prop;
     }
 }
