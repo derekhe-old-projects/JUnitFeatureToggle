@@ -1,7 +1,7 @@
-package com.april1985.concordion;
+package com.thoughtworks.junitext.featuretoggle.concordion;
 
-import com.april1985.tool.FeatureToggle;
-import com.april1985.tool.FeatureToggleRule;
+import com.thoughtworks.junitext.featuretoggle.FeatureToggle;
+import com.thoughtworks.junitext.featuretoggle.FeatureToggleRule;
 import org.concordion.integration.junit4.ConcordionRunner;
 import org.junit.Rule;
 import org.junit.runner.RunWith;

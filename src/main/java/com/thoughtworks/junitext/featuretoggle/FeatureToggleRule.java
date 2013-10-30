@@ -1,4 +1,4 @@
-package com.april1985.tool;
+package com.thoughtworks.junitext.featuretoggle;
 
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.rules.TestRule;
@@ -11,7 +11,7 @@ import java.util.Properties;
 public class FeatureToggleRule implements TestRule {
 
     public static final String TOGGLE_OFF = "OFF";
-    public static final String DEFAULT_PROPERTY_FILENAME = "feature-toggle.properties";
+    public static final String DEFAULT_PROPERTY_FILENAME = "./feature-toggle.properties";
 
     public FeatureToggleRule() {
         prop = new Properties();

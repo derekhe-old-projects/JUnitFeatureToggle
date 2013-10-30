@@ -1,4 +1,4 @@
-package com.april1985.tool;
+package com.thoughtworks.junitext.featuretoggle;
 
 import org.junit.Before;
 import org.junit.Test;
